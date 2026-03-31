@@ -1,0 +1,47 @@
+# 敏感配置（不 push）
+email_config.json
+
+# 运行时生成的内容
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# 从其他 GitHub repo clone 的目录（不属于这个 repo）
+html/
+docs/
+claude-config/
+essays/
+resume/
+scripts/
+web/
+zdwp/
+
+# 生成产物
+learning_reviews/
+reports/
+*.md.bak
+weekly-review-*.md
+
+# 临时文件
+*.tmp
+*.lock
+.env
+search.html
+
+# OAuth proxy 敏感配置
+oauth-proxy/config.json
+oauth-proxy/proxy.db
+oauth-proxy/frontend/dist/.DS_Store
+
+# cclog 生成产物
+cclog-site/sessions/
+cclog-site/digests/
+cclog-site/pending_deletes.json
+cclog-site/sessions.json
+
+# outputs 生成产物
+outputs/
+
+# 子模块/外部 repo
+learn/

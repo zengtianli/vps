@@ -45,3 +45,27 @@ outputs/
 
 # 子模块/外部 repo
 learn/
+
+
+# Python
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual env
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Cache
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

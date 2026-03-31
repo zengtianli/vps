@@ -46,10 +46,13 @@ REPO_PATHS = {
     "hydro-rainfall": "/opt/hydro/hydro-rainfall",
     "hydro-reservoir": "/opt/hydro/hydro-reservoir",
     "hydro-risk": "/opt/hydro/hydro-risk",
+    # OAuth proxy
+    "oauth-proxy": "/var/www/oauth-proxy",
 }
 
 # pull 之后需要 restart 的服务
 RESTART_SERVICES = {
+    "oauth-proxy": "oauth-proxy",
     "dockit": "dockit",
 }
 

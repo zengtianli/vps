@@ -13,29 +13,14 @@ SECRET = os.environ.get("GITHUB_WEBHOOK_SECRET", "")
 BUILD_SCRIPT = "/var/www/build_docs.sh"
 LOG_FILE = "/var/log/webhook_build.log"
 
-# repo name → 本地路径映射（所有 GitHub repos）
+# repo name → VPS 路径映射
+# 源自 ~/Dev/configs/repo-map.json（用 /repo-map sync 更新）
 REPO_PATHS = {
-    # 核心仓库
-    "docs": "/var/www/docs",
-    "scripts": "/var/www/scripts",
-    "claude-config": "/var/www/claude-config",
-    "zdwp": "/var/www/zdwp",
-    "learn": "/var/www/learn",
-    "vps": "/var/www",
-    "edict": "/opt/edict",
-    "essays": "/var/www/essays",
-    "resume": "/var/www/resume",
-    "reports": "/var/www/reports",
-    "web": "/var/www/web",
-    "dockit": "/opt/dockit",
-    # 新增仓库
     "cclog": "/opt/cclog",
+    "dockit": "/opt/dockit",
     "dockit-raycast": "/opt/dockit-raycast",
-    "extensions": "/opt/extensions",
-    "sync": "/opt/sync",
-    "zengtianli": "/opt/zengtianli",
-    # hydro 系列
-    "hydro-toolkit": "/opt/hydro/hydro-toolkit",
+    "docs": "/var/www/docs",
+    "essays": "/var/www/essays",
     "hydro-annual": "/opt/hydro/hydro-annual",
     "hydro-capacity": "/opt/hydro/hydro-capacity",
     "hydro-district": "/opt/hydro/hydro-district",
@@ -46,8 +31,16 @@ REPO_PATHS = {
     "hydro-rainfall": "/opt/hydro/hydro-rainfall",
     "hydro-reservoir": "/opt/hydro/hydro-reservoir",
     "hydro-risk": "/opt/hydro/hydro-risk",
-    # OAuth proxy
+    "hydro-toolkit": "/opt/hydro/hydro-toolkit",
+    "learn": "/var/www/learn",
     "oauth-proxy": "/var/www/oauth-proxy",
+    "reports": "/var/www/reports",
+    "resume": "/var/www/resume",
+    "scripts": "/var/www/scripts",
+    "sync": "/opt/sync",
+    "vps": "/var/www",
+    "web": "/var/www/web",
+    "zdwp": "/var/www/zdwp",
 }
 
 # pull 之后需要 restart 的服务
@@ -57,7 +50,7 @@ RESTART_SERVICES = {
 }
 
 # 需要 fetch+reset（而非 pull）的 repo
-FORCE_RESET_REPOS = {"edict"}
+FORCE_RESET_REPOS = set()
 
 
 def run_pull(repo_name, repo_path):
@@ -99,20 +92,6 @@ def run_pull(repo_name, repo_path):
             if result.stderr:
                 f.write(result.stderr)
             f.write(f"--- Exit code: {result.returncode} ---\n\n")
-
-        # edict 额外同步 SOUL.md 到 openclaw workspace
-        if repo_name == "edict":
-            import glob as _glob
-            for soul in _glob.glob(f"{repo_path}/agents/*/SOUL.md"):
-                agent = soul.split("/")[-2]
-                dest = f"/root/.openclaw/workspace-{agent}/soul.md"
-                import shutil as _shutil
-                try:
-                    _shutil.copy2(soul, dest)
-                except FileNotFoundError:
-                    pass
-            with open(LOG_FILE, "a") as f:
-                f.write(f"--- [edict] SOUL.md synced to openclaw workspaces ---\n\n")
 
         # docs 额外触发站点重建
         if repo_name == "docs":

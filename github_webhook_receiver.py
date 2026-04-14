@@ -16,6 +16,7 @@ LOG_FILE = "/var/log/webhook_build.log"
 # repo name → VPS 路径映射
 # 源自 ~/Dev/configs/repo-map.json（用 /repo-map sync 更新）
 REPO_PATHS = {
+    "audiobook": "/var/www/audiobook",
     "cclog": "/opt/cclog",
     "dockit": "/opt/dockit",
     "dockit-raycast": "/opt/dockit-raycast",
@@ -45,6 +46,7 @@ REPO_PATHS = {
 
 # pull 之后需要 restart 的服务
 RESTART_SERVICES = {
+    "audiobook": "audiobook",
     "oauth-proxy": "oauth-proxy",
     "dockit": "dockit",
 }

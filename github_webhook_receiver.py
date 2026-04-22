@@ -15,41 +15,30 @@ LOG_FILE = "/var/log/webhook_build.log"
 
 # repo name → VPS 路径映射
 # 源自 ~/Dev/configs/repo-map.json（用 /repo-map sync 更新）
+#
+# 2026-04-22 清理：已 archived（合并进 zengtianli/stations monorepo）的 repo 从
+# 此映射移除，它们不再 push 也不再需要 webhook pull：
+#   audiobook / cclog / dockit / docs / web (=website) / hydro-annual..toolkit (10)
+# 另外删除 oauth-proxy（该服务已整站下线）。
+# stations monorepo 本身未加入 webhook：Next.js 子项目走本地 `pnpm build + rsync`
+# 模式（见 ~/Dev/stations/web-stack/infra/deploy/deploy.sh）。
 REPO_PATHS = {
-    "audiobook": "/var/www/audiobook",
-    "cclog": "/opt/cclog",
-    "dockit": "/opt/dockit",
     "dockit-raycast": "/opt/dockit-raycast",
-    "docs": "/var/www/docs",
     "essays": "/var/www/essays",
-    "hydro-annual": "/opt/hydro/hydro-annual",
-    "hydro-capacity": "/opt/hydro/hydro-capacity",
-    "hydro-district": "/opt/hydro/hydro-district",
-    "hydro-efficiency": "/opt/hydro/hydro-efficiency",
-    "hydro-geocode": "/opt/hydro/hydro-geocode",
-    "hydro-irrigation": "/opt/hydro/hydro-irrigation",
     "hydro-qgis": "/opt/hydro/hydro-qgis",
-    "hydro-rainfall": "/opt/hydro/hydro-rainfall",
-    "hydro-reservoir": "/opt/hydro/hydro-reservoir",
-    "hydro-risk": "/opt/hydro/hydro-risk",
-    "hydro-toolkit": "/opt/hydro/hydro-toolkit",
     "learn": "/var/www/learn",
-    "oauth-proxy": "/var/www/oauth-proxy",
     "reports": "/var/www/reports",
     "resume": "/var/www/resume",
     "scripts": "/var/www/scripts",
     "sync": "/opt/sync",
     "vps": "/var/www",
-    "web": "/var/www/web",
     "zdwp": "/var/www/zdwp",
 }
 
 # pull 之后需要 restart 的服务
-RESTART_SERVICES = {
-    "audiobook": "audiobook",
-    "oauth-proxy": "oauth-proxy",
-    "dockit": "dockit",
-}
+# 2026-04-22 全清：原 audiobook/oauth-proxy/dockit 都失效
+# （audiobook/dockit 已迁 monorepo 走本地 rsync；oauth-proxy 下线）
+RESTART_SERVICES = {}
 
 # 需要 fetch+reset（而非 pull）的 repo
 FORCE_RESET_REPOS = set()

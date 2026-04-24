@@ -14,7 +14,7 @@ BUILD_SCRIPT = "/var/www/build_docs.sh"
 LOG_FILE = "/var/log/webhook_build.log"
 
 # repo name → VPS 路径映射
-# 源自 ~/Dev/configs/repo-map.json（用 /repo-map sync 更新）
+# 源自 ~/Dev/tools/configs/repo-map.json（用 /repo-map sync 更新）
 #
 # 2026-04-22 清理：已 archived（合并进 zengtianli/stations monorepo）的 repo 从
 # 此映射移除，它们不再 push 也不再需要 webhook pull：

@@ -42,7 +42,6 @@ ALLOWED_SERVICES = [
     "edict-refresh",
     "cc-chat",
     "alert-webhook",
-    "github-webhook",
 ]
 
 REPO_PATHS = {
@@ -93,7 +92,7 @@ def handle_status():
 
     # Systemd services
     svcs = []
-    for svc in ["cc-chat", "edict-dashboard", "edict-refresh", "github-webhook", "alert-webhook"]:
+    for svc in ["cc-chat", "edict-dashboard", "edict-refresh", "alert-webhook"]:
         status = run_cmd(f"systemctl is-active {svc} 2>/dev/null")
         icon = "✅" if status == "active" else "❌"
         svcs.append(f"  {icon} {svc}: {status}")

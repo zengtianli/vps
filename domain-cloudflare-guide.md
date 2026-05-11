@@ -101,8 +101,7 @@ Cloudflare CDN（全球节点）
 VPS Nginx (443)
     ↓ 根据子域名分流
     ├── panel.tianlizeng.cloud → localhost:8000 (Marzban)
-    ├── board.tianlizeng.cloud → localhost:7891 (Edict 看板)
-    └── sub.tianlizeng.cloud   → localhost:8000 (Marzban 订阅)
+    └── board.tianlizeng.cloud → localhost:7891 (Edict 看板)
 ```
 
 ### 2.2 子域名规划
@@ -111,7 +110,6 @@ VPS Nginx (443)
 |--------|------|------|---------|
 | `panel.tianlizeng.cloud` | Marzban 管理面板 | localhost:8000 | 🟠 Proxied |
 | `board.tianlizeng.cloud` | Edict 三省六部看板 | localhost:7891 | 🟠 Proxied |
-| `sub.tianlizeng.cloud` | Marzban 订阅链接 | localhost:8000 | 🟠 Proxied |
 
 > **注意**：主域名 `tianlizeng.cloud` 建议不指向 VPS，留给个人网站或其他用途。
 
@@ -155,7 +153,6 @@ CF 后台 → DNS → Records → Add record
 |------|------|---------|-------|
 | A | `panel` | `<VPS_IP>` | 🟠 Proxied |
 | A | `board` | `<VPS_IP>` | 🟠 Proxied |
-| A | `sub` | `<VPS_IP>` | 🟠 Proxied |
 
 ### 3.2 VPS 端配置（我来操作）
 
@@ -195,28 +192,13 @@ server {
 }
 ```
 
-类似地为 `board` 和 `sub` 各创建一个配置文件。
+类似地为 `board` 创建一个配置文件。
 
-#### Step 4：更新 Marzban 订阅地址
-
-修改 `/opt/marzban/.env`：
-
-```bash
-# 改前（裸 IP）
-XRAY_SUBSCRIPTION_URL_PREFIX = "http://<VPS_IP>:8000"
-
-# 改后（域名）
-XRAY_SUBSCRIPTION_URL_PREFIX = "https://sub.tianlizeng.cloud"
-```
-
-然后重启 Marzban：`docker restart marzban-marzban-1`
-
-#### Step 5：验证
+#### Step 4：验证
 
 ```bash
 curl -I https://panel.tianlizeng.cloud/dashboard/
 curl -I https://board.tianlizeng.cloud/
-curl -I https://sub.tianlizeng.cloud/
 ```
 
 ---
@@ -315,29 +297,7 @@ SSH 隧道作为**备用方案**保留（CF 挂了或调试时用）。
 
 ---
 
-## 六、Marzban 订阅链接的好处
-
-改用域名后，Shadowrocket 订阅地址从：
-
-```
-http://<VPS_IP>:8000/sub/xxx
-```
-
-变成：
-
-```
-https://sub.tianlizeng.cloud/sub/xxx
-```
-
-好处：
-1. **HTTPS 加密**：订阅内容不再明文传输
-2. **隐藏 IP**：订阅链接不暴露 VPS 真实 IP
-3. **方便更换 IP**：如果 VPS IP 被封，改 CF DNS 记录就行，客户端订阅地址不用变
-4. **看起来更正规**：分享给朋友也好看
-
----
-
-## 七、关键概念速查表
+## 六、关键概念速查表
 
 | 概念 | 一句话解释 |
 |------|-----------|
@@ -354,17 +314,17 @@ https://sub.tianlizeng.cloud/sub/xxx
 
 ---
 
-## 八、待你操作的步骤
+## 七、待你操作的步骤
 
 完成以下步骤后告诉我，我来配置 VPS 端：
 
 1. [ ] CF 后台设 SSL 模式为 **Full**
 2. [ ] CF 后台生成 **Origin 证书**（通配符 `*.tianlizeng.cloud`），把证书内容发给我
-3. [ ] CF 后台添加 3 条 **A 记录**（panel/board/sub → <VPS_IP>，开启 Proxied）
+3. [ ] CF 后台添加 2 条 **A 记录**（panel/board → <VPS_IP>，开启 Proxied）
 
 ---
 
-## 九、文件索引
+## 八、文件索引
 
 | 文件 | 说明 |
 |------|------|
